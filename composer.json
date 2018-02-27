@@ -1,0 +1,29 @@
+{
+    "name": "zodream/spider",
+    "description": "web spider",
+    "keywords": ["spider", "zodream"],
+    "homepage": "https://github.com/zodream/spider",
+    "license": "MIT",
+    "authors": [
+        {
+            "name" : "Jason Zou",
+            "email" : "zodream@fixmail.com",
+            "homepage" : "http://www.zodream.cn/",
+            "role" : "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.0",
+        "zodream/zodream": "*",
+        "zodream/helpers": "*",
+        "zodream/http": "*",
+        "zodream/disk": "*",
+        "zodream/database" : "*",
+        "krakjoe/pthreads-polyfill": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zodream\\Spider\\": "src/"
+        }
+    }
+}
