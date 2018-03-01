@@ -8,7 +8,7 @@ use Zodream\Spider\Support\Uri;
 class Spider {
 
     public static function url($url) {
-        $uri = new Uri($url);
+        $uri = $url instanceof Uri ? $url : new Uri($url);
         return static::http($uri->asHttp());
     }
 

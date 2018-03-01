@@ -127,7 +127,7 @@ class Html {
      *
      * @param string $selector
      * @param number $idx 找第几个,从0开始计算，null 表示都返回, 负数表示倒数第几个
-     * @return self|self[]|boolean
+     * @return Html|Html[]|boolean
      */
     public function find($selector, $idx = null) {
         if (empty($this->getDocument()->childNodes)) {
@@ -171,6 +171,7 @@ class Html {
             case 'html':
                 return $this->innerHtml();
             case 'plainText':
+            case 'text':
                 return $this->plainText();
             case 'href':
                 return $this->getAttr('href');
