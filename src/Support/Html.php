@@ -20,7 +20,30 @@ class Html {
     private $_lFound = [];
 
     public function __construct($html) {
+        $this->setHtml($html);
+    }
+
+    /**
+     * @param string $html
+     * @return Html
+     */
+    public function setHtml($html) {
+        if ($html instanceof DOMNode) {
+            $this->document = $html;
+            return $this;
+        }
         $this->html = $html;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtml() {
+        if (is_null($this->html) && !empty($this->document)) {
+            $this->html = $this->outerHtml();
+        }
+        return $this->html;
     }
 
     /**
@@ -39,20 +62,20 @@ class Html {
      */
     public function subValue($begin, $end = null) {
         if (!empty($begin) && !is_integer($begin)) {
-            $begin = stripos($this->html, $begin);
+            $begin = stripos($this->getHtml(), $begin);
         }
         $begin = intval($begin);
         if (!empty($end) && !is_integer($end)) {
-            $end = stripos($this->html, $end, $begin);
+            $end = stripos($this->getHtml(), $end, $begin);
         }
         $end = intval($end);
         if ($end > 0 && $begin >= $end) {
             return '';
         }
         if ($end <= 0) {
-            return substr($this->html, $begin);
+            return substr($this->getHtml(), $begin);
         }
-        return substr($this->html, $begin, $end - $begin);
+        return substr($this->getHtml(), $begin, $end - $begin);
     }
 
     /**
@@ -61,7 +84,7 @@ class Html {
      * @return $this|Collection
      */
     public function matches($pattern, callable $func = null) {
-        if (!preg_match_all($pattern, $this->html, $matches, PREG_SET_ORDER)) {
+        if (!preg_match_all($pattern, $this->getHtml(), $matches, PREG_SET_ORDER)) {
             $matches = [];
         }
         if (empty($func)) {
@@ -79,7 +102,7 @@ class Html {
      * @return $this|Collection
      */
     public function match($pattern, callable $func = null) {
-        if (!preg_match($pattern, $this->html, $match)) {
+        if (!preg_match($pattern, $this->getHtml(), $match)) {
             $match = [];
         }
         if (empty($func)) {
@@ -95,7 +118,7 @@ class Html {
      * @return string
      */
     public function matchValue($pattern, $index = 0) {
-        if (!preg_match($pattern, $this->html, $match)) {
+        if (!preg_match($pattern, $this->getHtml(), $match)) {
             return '';
         }
         if (isset($match[$index])) {
@@ -110,6 +133,9 @@ class Html {
     public function getDocument() {
         if (!empty($this->document)) {
             return $this->document;
+        }
+        if ($this->html instanceof DOMNode) {
+            return $this->document = $this->html;
         }
         $dom = new DOMDocument();
         $dom->preserveWhiteSpace = FALSE;
