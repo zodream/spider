@@ -453,4 +453,33 @@ class Html {
     public function __toString() {
         return $this->html;
     }
+
+    public static function toText($html) {
+        $html = preg_replace('/<!--[\s\S]*-->/is', '', $html);
+        $html = preg_replace('/\s+/is', ' ', $html);
+        $html = preg_replace('/\<style .*?\<\\/style\>/is', '', $html);
+        $html = preg_replace('/\<script.*?\<\/script>/is', '', $html);
+        $html = preg_replace('/\<br\s*\/\>/i', PHP_EOL, $html);
+        $html = preg_replace('/\<\/p\>/i', PHP_EOL, $html);
+        $html = preg_replace('/&(quot|#34)/i', '/', $html);
+        $html = preg_replace('/&(nbsp|#160);/i', ' ', $html);
+        $html = preg_replace('/&(amp|#38);/i', '&', $html);
+        $html = preg_replace('/&(lt|#60);/i', '<', $html);
+        $html = preg_replace('/“/i', '"', $html);
+        $html = preg_replace('/&ldquo;/i', '"', $html);
+        $html = preg_replace('/‘/i', '\'', $html);
+        $html = preg_replace('/&lsquo;/i', '\'', $html);
+        $html = preg_replace('/\'/i', '\'', $html);
+        $html = preg_replace('/&rsquo;/i', '\'', $html);
+        $html = preg_replace('/&(gt|#62);/i', '>', $html);
+        $html = preg_replace('/”/i', '"', $html);
+        $html = preg_replace('/&rdquo;/i', '"', $html);
+        $html = preg_replace('/&(iexcl|#161);/i', '\xa1', $html);
+        $html = preg_replace('/&(cent|#162);/i', '\xa2', $html);
+        $html = preg_replace('/&(pound|#163);/i', '\xa3', $html);
+        $html = preg_replace('/&(copy|#169);/i', '\xa9', $html);
+        $html = strip_tags($html);
+        $html = html_entity_decode($html, ENT_QUOTES, 'utf-8');
+        return preg_replace('/&#.*?;/i', '', $html);
+    }
 }
