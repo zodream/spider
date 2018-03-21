@@ -459,7 +459,7 @@ class Html {
         $html = preg_replace('/\s+/is', ' ', $html);
         $html = preg_replace('/\<style .*?\<\\/style\>/is', '', $html);
         $html = preg_replace('/\<script.*?\<\/script>/is', '', $html);
-        $html = preg_replace('/\<br\s*\/\>/i', PHP_EOL, $html);
+        $html = preg_replace('/\<br\s*\/?\>/i', PHP_EOL, $html);
         $html = preg_replace('/\<\/p\>/i', PHP_EOL, $html);
         $html = preg_replace('/&(quot|#34)/i', '/', $html);
         $html = preg_replace('/&(nbsp|#160);/i', ' ', $html);
