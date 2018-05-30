@@ -3,8 +3,10 @@ namespace Zodream\Spider;
 
 use Zodream\Disk\File;
 use Zodream\Http\Http;
+use Zodream\Service\Factory;
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
+use Exception;
 
 class Spider {
 
@@ -14,7 +16,13 @@ class Spider {
     }
 
     public static function http(Http $http) {
-        return new Html($http->text());
+        try {
+            $html = $http->text();
+        } catch (Exception $ex) {
+            $html = '';
+            Factory::log()->error($ex->getMessage());
+        }
+        return new Html($html);
     }
 
     public static function file($file) {

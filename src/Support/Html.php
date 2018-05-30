@@ -36,6 +36,10 @@ class Html {
         return $this;
     }
 
+    public function isEmpty() {
+        return empty($this->html);
+    }
+
     /**
      * @return string
      */
