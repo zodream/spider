@@ -4,6 +4,8 @@ namespace Zodream\Spider\Support;
 use DOMDocument;
 use DOMNode;
 use DOMElement;
+use Zodream\Service\Factory;
+use Exception;
 
 class Html {
 
@@ -101,6 +103,15 @@ class Html {
     }
 
     /**
+     * 截取
+     * @param $tag
+     * @return array
+     */
+    public function split($tag) {
+        return explode($tag, $this->html);
+    }
+
+    /**
      * @param $pattern
      * @param callable|null $func
      * @return $this|Collection
@@ -144,7 +155,8 @@ class Html {
         $dom = new DOMDocument();
         $dom->preserveWhiteSpace = FALSE;
         $dom->strictErrorChecking = FALSE;
-        $dom->loadHTML($this->html);
+        // 不显示所有错误
+        $dom->loadHTML($this->html, LIBXML_NOERROR);
         return $this->document = $dom;
     }
 
