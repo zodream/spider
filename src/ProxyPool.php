@@ -71,6 +71,9 @@ class ProxyPool {
         $data = [];
         $http = new Http();
         foreach ($this->data as $url) {
+            if (empty($url)) {
+                continue;
+            }
             $http->url('https://www.baidu.com/')
                 ->setProxy($url)
                 ->text();
