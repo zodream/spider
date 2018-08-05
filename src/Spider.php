@@ -38,7 +38,9 @@ class Spider {
     public static function http($http) {
         $http = self::getHttp($http);
         try {
-            $html = $http->text();
+            $html = $http
+                ->setOption(CURLOPT_TIMEOUT, 60)
+                ->text();
         } catch (Exception $ex) {
             $html = '';
             Factory::log()->error($ex->getMessage());
