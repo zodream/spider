@@ -3,6 +3,7 @@ namespace Zodream\Spider;
 
 use Zodream\Disk\File;
 use Zodream\Http\Http;
+use Zodream\Http\HttpBatch;
 use Zodream\Service\Factory;
 use Zodream\Spider\Support\Html;
 use Zodream\Spider\Support\Uri;
@@ -31,8 +32,17 @@ class Spider {
     }
 
     public static function url($url) {
-        $uri = $url instanceof Uri ? $url : new Uri($url);
-        return static::http($uri->asHttp());
+        return static::http($url);
+    }
+
+    /**
+     * 多线程批量获取数据
+     * @param array $urls
+     * @return Html[]
+     * @throws Exception
+     */
+    public static function manyUrl(array $urls) {
+        return self::manyHttp($urls);
     }
 
     public static function http($http) {
@@ -48,6 +58,29 @@ class Spider {
         return new Html($html);
     }
 
+    /**
+     * 批量处理
+     * @param array $https
+     * @return Html[]
+     * @throws Exception
+     */
+    public static function manyHttp(array $https) {
+        if (empty($https)) {
+            return [];
+        }
+        $box = new HttpBatch();
+        foreach ($https as $http) {
+            $box->addHttp(self::getHttp($http)->setOption(CURLOPT_TIMEOUT, 60));
+        }
+        $box->execute();
+        return $box->map(function (Http $http) {
+            if (empty($http->getResponseHeader('errorNo'))) {
+                return null;
+            }
+            return new Html($http->getResponseText());
+        });
+    }
+
     public static function download($url, $file) {
         $http = self::getHttp($url);
         return $http->save($file);
@@ -59,7 +92,7 @@ class Spider {
         } elseif ($url instanceof Http) {
             $http = $url;
         } else {
-            $http = (new Uri($url))->asHttp();
+            $http = new Http($url);
         }
         $http->setUserAgent(self::$agent_list[rand(0, 2)]);
         static::getProxyPool()->apply($http);
