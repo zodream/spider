@@ -471,7 +471,7 @@ class Html {
     }
 
     public static function toText($html) {
-        $html = preg_replace('/<!--[\s\S]*-->/is', '', $html);
+        $html = preg_replace('/<!--[\s\S]*?-->/is', '', $html);
         $html = preg_replace('/\s+/is', ' ', $html);
         $html = preg_replace('/\<style .*?\<\\/style\>/is', '', $html);
         $html = preg_replace('/\<script.*?\<\/script>/is', '', $html);
