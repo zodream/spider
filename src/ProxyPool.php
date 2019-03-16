@@ -38,14 +38,16 @@ class ProxyPool {
      * @throws \Exception
      */
     public function load() {
-        $cache_key = 'ip_proxy';
-        if (!Factory::cache()->has($cache_key)) {
-            $data = Spider::url('http://api.xicidaili.com/free2016.txt')->split("\n");
-            Factory::cache()->set($cache_key, $data, 3600);
-        } else {
-            $data = Factory::cache($cache_key);
-        }
+        $cache_key = 'spider_ip_proxy';
+        $data = cache()->getOrSet($cache_key, function () {
+            $content = file_get_contents('http://zodream.localhost/proxy?format=json');
+            return empty($content) ? json_decode($content) : [];
+        }, 3600);
         foreach ($data as $url) {
+            if (is_array($url)) {
+                $url = sprintf('%s://%s:%s',
+                    strtolower($url['http']), $url['ip'], $url['port']);
+            }
             $this->add($url);
         }
         return $this;

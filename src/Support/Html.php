@@ -153,10 +153,15 @@ class Html {
             return $this->document = $this->html;
         }
         $dom = new DOMDocument();
-        $dom->preserveWhiteSpace = FALSE;
-        $dom->strictErrorChecking = FALSE;
+        $dom->preserveWhiteSpace = false;
+        $dom->strictErrorChecking = false;
+        try {
+            $dom->loadHTML($this->html, LIBXML_NOERROR);
+        } catch (\ErrorException $exception) {
+            $this->html = mb_convert_encoding($this->html, 'HTML-ENTITIES', 'UTF-8');
+            $dom->loadHTML($this->html, LIBXML_NOERROR);
+        }
         // 不显示所有错误
-        $dom->loadHTML($this->html, LIBXML_NOERROR);
         return $this->document = $dom;
     }
 
@@ -302,7 +307,7 @@ class Html {
      * @return array
      */
     protected function parseSelector($selector_string) {
-        $pattern = '/([\w-:\*]*)(?:\#([\w-]+)|\.([\w-]+))?(?:\[@?(!?[\w-:]+)(?:([!*^$]?=)["\']?(.*?)["\']?)?\])?([\/, ]+)/is';
+        $pattern = '/([\w\-:\*]*)(?:\#([\w-]+)|\.([\w-]+))?(?:\[@?(!?[\w\-:]+)(?:([!*^$]?=)["\']?(.*?)["\']?)?\])?([\/, ]+)/is';
         preg_match_all($pattern, trim($selector_string) . ' ', $matches, PREG_SET_ORDER);
         $selectors = [];
         $result = [];
