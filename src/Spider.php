@@ -55,7 +55,7 @@ class Spider {
             $html = '';
             Factory::log()->error($ex->getMessage());
         }
-        return new Html($html);
+        return new Html(Http::tryGzipDecode($html));
     }
 
     /**

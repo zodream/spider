@@ -40,7 +40,15 @@ class ProxyPool {
     public function load() {
         $cache_key = 'spider_ip_proxy';
         $data = cache()->getOrSet($cache_key, function () {
-            $content = file_get_contents('http://zodream.localhost/proxy?format=json');
+            $proxy_url = config('spider.proxy');
+            if (empty($proxy_url)) {
+                return [];
+            }
+            try {
+                $content = file_get_contents($proxy_url);
+            } catch (\Exception $ex) {
+                return [];
+            }
             return empty($content) ? json_decode($content) : [];
         }, 3600);
         foreach ($data as $url) {

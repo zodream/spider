@@ -14,6 +14,17 @@ web spider
 
 ```
 
+### 代理配置
+
+config.php
+
+这是使用内部模块代理
+```php
+[
+    'spider.proxy' => 'http://zodream.localhost/proxy?format=json'
+];
+```
+
 ### 使用方法
 
 ```PHP
