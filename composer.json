@@ -18,8 +18,7 @@
         "zodream/helpers": "*",
         "zodream/http": "*",
         "zodream/disk": "*",
-        "zodream/database" : "*",
-        "krakjoe/pthreads-polyfill": "^1.0"
+        "zodream/database" : "*"
     },
     "autoload": {
         "psr-4": {
