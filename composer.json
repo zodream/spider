@@ -14,11 +14,11 @@
     ],
     "require": {
         "php": ">=8.1",
-        "zodream/zodream": "*",
-        "zodream/helpers": "*",
-        "zodream/http": "*",
-        "zodream/disk": "*",
-        "zodream/database" : "*"
+        "zodream/zodream": "dev-master",
+        "zodream/helpers": "dev-master",
+        "zodream/http": "dev-master",
+        "zodream/disk": "dev-master",
+        "zodream/database" : "dev-master"
     },
     "autoload": {
         "psr-4": {
